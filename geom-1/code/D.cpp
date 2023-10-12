@@ -122,7 +122,20 @@ int sign(long double a)
 
 bool in_treugol(dot a, dot b, dot c, dot x)
 {
+    long double S1 = (b - a) % (x - a);
+    long double S2 = (c - b) % (x - b);
+    long double S3 = (a - c) % (x - c);
+    long double SS = (a - b) % (c - b);
+    S1 = abs(S1);
+    S2 = abs(S2);
+    S3 = abs(S3);
+    SS = abs(SS);
 
+    if(sign(SS - (S1 + S2 + S3)) == 0)
+    {
+        return true;
+    }
+    return false;
 }
 
 int main()
@@ -130,7 +143,7 @@ int main()
     int n, m, k;
     cin >> n >> m >> k;
 
-    int cnt;
+    int cnt = 0;
 
     vector<dot> v;
 
@@ -143,12 +156,6 @@ int main()
 
     dot O = v[0];
 
-    vector<int> g(n);
-    
-    for(int i = 0; i < n-2; ++i)
-    {
-        g[i] = i + 1;
-    }
 
     for(int i = 0; i < m; ++i)
     {
@@ -163,23 +170,34 @@ int main()
             continue;
         }
 
-        int it = lower_bound(g.begin(), g.end(), 0, [&](int a, int b)
+        int l = 1;
+        int r = n-1;
+        while(r - l > 1)
         {
-            dot Y = v[b] - O;
+            int mm = (r + l) / 2;
+
+            dot Y = v[mm] - O;
 
             if(sign(Y % X) >= 0)
             {
-                return false;
+                l = mm;
             } else {
-                return true;
+                r = mm;
             }
+        }
 
-        }) - g.begin();
-
-        
-
-
+        if(in_treugol(v[0], v[l], v[r], X + O))
+        {
+            ++cnt;
+        }
     }
 
+
+    if(cnt >= k)
+    {
+        cout << "YES\n";
+    } else {
+        cout << "NO\n";
+    }
 
 }
