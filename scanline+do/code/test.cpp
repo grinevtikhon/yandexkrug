@@ -34,7 +34,12 @@ long long get(long long v, long long tl, long long tr, long long l, long long r)
     long long tm = (tl + tr) / 2; 
  
     return get(2*v+1, tl, tm, l, r) + get(2*v+2, tm, tr, l, r); 
-} 
+}
+
+long long get(long long l, long long r)
+{
+    return get(0, 0, vec.size(), l, r + 1);
+}
  
 int main() 
 { 
